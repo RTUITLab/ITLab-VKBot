@@ -23,8 +23,8 @@ public class UserService {
     private String token;
     @Value("${secrets.url}")
     private String url;
-    @Value("${secrets.query}")
-    private String query;
+//    @Value("${secrets.query}")
+//    private String query;
 
     public UserService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
@@ -34,7 +34,7 @@ public class UserService {
      * Send get request for users info
      * @return List of users
      */
-    public Optional<List<User>> getUsers() {
+    public Optional<List<User>> getUsers(String query) {
         HttpEntity<String> request = getHeaders();
         try {
             log.info("Send get request for users: " + url + query);
@@ -60,7 +60,7 @@ public class UserService {
      * @return User entity if success or <b><u>null pointer</u></b> if user not found
      */
     public Optional<User> getUser(String userId) {
-        Optional<List<User>> users = getUsers();
+        Optional<List<User>> users = getUsers("");
         if (!users.isPresent()) {
             log.error("user list from getUsers() is empty");
             return Optional.empty();
@@ -91,4 +91,6 @@ public class UserService {
         headers.add("Key", token);
         return new HttpEntity<>("body", headers);
     }
+
+
 }

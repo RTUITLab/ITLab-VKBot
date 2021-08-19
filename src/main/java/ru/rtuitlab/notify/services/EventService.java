@@ -32,6 +32,8 @@ public class EventService implements MessageHandler{
 
     @Value("${database.redis.sendChannel}")
     private String channel;
+    @Value("${secrets.queryAll}")
+    private String query;
 
     /**
      * Handle messages in events channel in redis
@@ -100,7 +102,7 @@ public class EventService implements MessageHandler{
      * @throws JsonProcessingException
      */
     private void sendPublicInvites(Event event) throws JsonProcessingException {
-        Optional<List<User>> users = userService.getUsers();
+        Optional<List<User>> users = userService.getUsers(query);
         if (!users.isPresent()) {
             log.error("Can't get users info");
             return;

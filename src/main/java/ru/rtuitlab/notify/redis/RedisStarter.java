@@ -17,6 +17,7 @@ public class RedisStarter {
     private final ReportService reportService;
     private final EventService eventService;
     private final CommentService commentService;
+    private final FeedbackService feedbackService;
 //    private final TestService testService;
 
     @Value("${database.redis.host:localhost}")
@@ -30,10 +31,11 @@ public class RedisStarter {
     @Value("${database.redis.timeout:30}")
     private Integer timeout;
 
-    public RedisStarter(ReportService reportService, EventService eventService, CommentService commentService) {
+    public RedisStarter(ReportService reportService, EventService eventService, CommentService commentService, FeedbackService feedbackService/*, TestService testService*/) {
         this.reportService = reportService;
         this.eventService = eventService;
         this.commentService = commentService;
+        this.feedbackService = feedbackService;
 //        this.testService = testService;
     }
 
@@ -48,7 +50,8 @@ public class RedisStarter {
         executorService.execute(new Listener(reportService, channels.get(0)));
         executorService.execute(new Listener(eventService, channels.get(1)));
         executorService.execute(new Listener(commentService, channels.get(2)));
-//        executorService.execute(new Listener(testService, channels.get(3)));
+        executorService.execute(new Listener(feedbackService, channels.get(3)));
+//        executorService.execute(new Listener(testService, channels.get(4)));
         log.info("All listeners have been executed");
     }
 
